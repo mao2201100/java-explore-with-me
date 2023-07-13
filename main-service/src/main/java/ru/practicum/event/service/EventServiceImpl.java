@@ -65,7 +65,14 @@ public class EventServiceImpl implements EventService {
                                       Integer size) {
 
         validateParameters(from, size);
-
+        if (categories != null) {
+            for (Long categoryId : categories) {
+                if (categoryId == 0) {
+                    log.info("В запросе указан неверный идентификатор события {}", categoryId);
+                    throw new ValidationException();
+                }
+            }
+        }
         String sql = "SELECT *\n" +
                 "FROM PUBLIC.EVENTS AS EVENTS\n" +
                 "LEFT JOIN\n" +

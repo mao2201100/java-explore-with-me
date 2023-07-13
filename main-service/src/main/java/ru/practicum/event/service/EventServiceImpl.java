@@ -1,6 +1,5 @@
 package ru.practicum.event.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +59,7 @@ public class EventServiceImpl implements EventService {
                             CategoryRepository categoryRepository, NamedParameterJdbcTemplate namedJdbcTemplate,
                             ClientStatistic statClient, CategoryMapper categoryMapper,
                             UserRepository userRepository, RequestRepository requestRepository,
-                            RequestMapper requestMapper, UserMapper userMapper,LocationMapper locationMapper){
+                            RequestMapper requestMapper, UserMapper userMapper, LocationMapper locationMapper) {
         this.eventMapper = eventMapper;
         this.eventRepository = eventRepository;
         this.categoryRepository = categoryRepository;

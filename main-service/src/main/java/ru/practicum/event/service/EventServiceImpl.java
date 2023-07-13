@@ -142,11 +142,14 @@ public class EventServiceImpl implements EventService {
         return eventFullDto;
     }
 
-
     @Override
-    public List<EventFullDto> getAdminAllEvents(List<Long> users, List<String> states, List<Long> categories,
-                                                LocalDateTime rangeStart, LocalDateTime rangeEnd,
-                                                int from, int size) {
+    public List<EventFullDto> getAdminAllEvents(List<Long> users,
+                                                List<String> states,
+                                                List<Long> categories,
+                                                LocalDateTime rangeStart,
+                                                LocalDateTime rangeEnd,
+                                                int from,
+                                                int size) {
         validateParameters(from, size);
         List<EventState> eventStates = new ArrayList<>();
         if (states != null) {
@@ -168,7 +171,7 @@ public class EventServiceImpl implements EventService {
                     rangeEnd,
                     PageRequest.of(from, size));
         }
-        log.info("События найдены {}", events);
+        log.info("Получены события {}", events);
         for (Event event : events) {
             EventFullDto eventFullDto = eventMapper.toEventFullDto(event);
             eventFullDto.setViews(getNumberViews(event.getId()));
@@ -190,7 +193,7 @@ public class EventServiceImpl implements EventService {
         if (stateAction != null) {
             if (!event.getState().equals(EventState.PENDING)) {
                 log.info("Событие можно публиковать или отклонить, только если оно в состоянии ожидания публикации." +
-                                "Текущий статус события - {}", event.getState());
+                        "Текущий статус события - {}", event.getState());
                 throw new ConflictException();
             }
             switch (stateAction) {

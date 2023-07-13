@@ -1,6 +1,5 @@
 package ru.practicum.category.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -21,12 +20,19 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
     private final EventRepository eventRepository;
+
     private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
+
+
+    public CategoryServiceImpl(EventRepository eventRepository, CategoryMapper categoryMapper, CategoryRepository categoryRepository){
+        this.eventRepository = eventRepository;
+        this.categoryMapper = categoryMapper;
+        this.categoryRepository = categoryRepository;
+    }
 
 
     @Override

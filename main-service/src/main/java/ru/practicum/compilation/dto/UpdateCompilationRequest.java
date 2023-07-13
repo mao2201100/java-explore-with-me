@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class СhangeCompilationRequest {
+public class UpdateCompilationRequest {
 
     private List<Long> events;
     private Boolean pinned;

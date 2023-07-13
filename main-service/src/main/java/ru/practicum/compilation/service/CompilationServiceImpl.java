@@ -5,7 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.FreshCompilationDto;
-import ru.practicum.compilation.dto.СhangeCompilationRequest;
+import ru.practicum.compilation.dto.UpdateCompilationRequest;
 import ru.practicum.compilation.mapper.CompilationMapper;
 import ru.practicum.compilation.model.Compilation;
 import ru.practicum.compilation.repo.CompilationRepository;
@@ -97,7 +97,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public CompilationDto updateCompilation(long compId, СhangeCompilationRequest updateRequest) {
+    public CompilationDto updateCompilation(long compId, UpdateCompilationRequest updateRequest) {
         Compilation foundCompilation = findCompilation(compId);
         if (updateRequest.getPinned() != null) {
             foundCompilation.setPinned(updateRequest.getPinned());

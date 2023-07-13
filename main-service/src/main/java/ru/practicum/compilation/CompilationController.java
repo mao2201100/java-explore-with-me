@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.FreshCompilationDto;
-import ru.practicum.compilation.dto.СhangeCompilationRequest;
+import ru.practicum.compilation.dto.UpdateCompilationRequest;
 import ru.practicum.compilation.service.CompilationService;
 
 import java.util.List;
@@ -50,9 +50,9 @@ public class CompilationController {
 
     @PatchMapping("/admin/compilations/{compId}")
     public ResponseEntity<CompilationDto> updateCompilation(@PathVariable Long compId,
-                                                            @RequestBody СhangeCompilationRequest сhangeCompilationRequest) {
-        log.info("Получен PATCH запрос: /admin/compilations/{} endpoint with body={}", compId, сhangeCompilationRequest);
-        return ResponseEntity.ok().body(compilationService.updateCompilation(compId, сhangeCompilationRequest));
+                                                            @RequestBody UpdateCompilationRequest updateCompilationRequest) {
+        log.info("Получен PATCH запрос: /admin/compilations/{} endpoint with body={}", compId, updateCompilationRequest);
+        return ResponseEntity.ok().body(compilationService.updateCompilation(compId, updateCompilationRequest));
     }
 
 }

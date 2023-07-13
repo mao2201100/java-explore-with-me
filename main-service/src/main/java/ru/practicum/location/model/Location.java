@@ -21,7 +21,7 @@ public class Location {
     private float lat; // Широта места проведения события
 
     @Column(nullable = false)
-    private float lon; // долгота места проведения события
+    private float lon; // долгота места проведения события.
 
     @Override
     public boolean equals(Object o) {

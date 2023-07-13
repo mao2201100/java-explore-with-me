@@ -158,20 +158,21 @@ public class EventServiceImpl implements EventService {
         return eventDto;
     }
 
+
     @Override
     public List<EventDto> getAdminAllEvents(List<Long> users,
-                                            List<String> states,
-                                            List<Long> categories,
-                                            LocalDateTime rangeStart,
-                                            LocalDateTime rangeEnd,
-                                            int from,
-                                            int size) {
+                                          List<String> states,
+                                          List<Long> categories,
+                                          LocalDateTime rangeStart,
+                                          LocalDateTime rangeEnd,
+                                          int from,
+                                          int size) {
         validateParameters(from, size);
-        List<EventStatatus> eventStatatuses = new ArrayList<>();
+        List<EventStatatus> eventStates = new ArrayList<>();
         if (states != null) {
             for (String state : states) {
-                EventStatatus eventStatatus = EventStatatus.valueOf(state);
-                eventStatatuses.add(eventStatatus);
+                EventStatatus eventState = EventStatatus.valueOf(state);
+                eventStates.add(eventState);
             }
         }
         List<EventDto> eventsFullDto = new ArrayList<>();
@@ -181,7 +182,7 @@ public class EventServiceImpl implements EventService {
         } else {
             events = eventRepository.findAllByInitiatorIdInAndStateInAndCategoryIdInAndEventDateIsAfterAndEventDateIsBefore(
                     users,
-                    eventStatatuses,
+                    eventStates,
                     categories,
                     rangeStart,
                     rangeEnd,
@@ -189,14 +190,15 @@ public class EventServiceImpl implements EventService {
         }
         log.info("Получены события {}", events);
         for (Event event : events) {
-            EventDto eventDto = eventMapper.toEventFullDto(event);
-            eventDto.setViews(getNumberViews(event.getId()));
-            eventDto.setConfirmedRequests(getNumberConfirmedRequests(event));
-            eventsFullDto.add(eventDto);
+            EventDto eventFullDto = eventMapper.toEventFullDto(event);
+            eventFullDto.setViews(getNumberViews(event.getId()));
+            eventFullDto.setConfirmedRequests(getNumberConfirmedRequests(event));
+            eventsFullDto.add(eventFullDto);
         }
         log.info("Найдены представления событий {}", eventsFullDto);
         return eventsFullDto;
     }
+
 
     @Override
     public EventDto updateAdminEvent(long eventId, ChangeEventAdminRequest updateRequest) {

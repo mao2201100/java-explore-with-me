@@ -1,4 +1,4 @@
-package ru.practicum.request.controller;
+package ru.practicum.request;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,28 +13,31 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/users/{userId}/requests")
-@RequiredArgsConstructor
 public class RequestController {
 
     private final RequestService requestService;
 
+    public RequestController(RequestService requestService){
+        this.requestService =requestService;
+    }
+
     @GetMapping
     public ResponseEntity<List<ParticipationRequestDto>> getUserRequests(@PathVariable Long userId) {
-        log.info("Получен GET запрос: /users/{}/requests endpoint", userId);
+        log.info("Получен GET запрос: /users/{}/", userId);
         return ResponseEntity.ok().body(requestService.getUserRequests(userId));
     }
 
     @PostMapping
     public ResponseEntity<ParticipationRequestDto> createUserRequest(@PathVariable Long userId,
                                                                      @RequestParam(required = false) Long eventId) {
-        log.info("Получен POST запрос: /users/{}/requests?eventId={} endpoint", userId, eventId);
+        log.info("Получен POST запрос: /users/{}/requests?eventId={} ", userId, eventId);
         return ResponseEntity.status(HttpStatus.CREATED).body(requestService.createUserRequest(userId, eventId));
     }
 
     @PatchMapping("{requestId}/cancel")
     public ResponseEntity<ParticipationRequestDto> cancelUserRequest(@PathVariable Long userId,
                                                                      @PathVariable Long requestId) {
-        log.info("Получен PATCH запрос: /users/{}/requests/{}/cancel endpoint", userId, requestId);
+        log.info("Получен PATCH запрос: /users/{}/requests/{}/cancel ", userId, requestId);
         return ResponseEntity.ok().body(requestService.cancelUserRequest(userId, requestId));
     }
 

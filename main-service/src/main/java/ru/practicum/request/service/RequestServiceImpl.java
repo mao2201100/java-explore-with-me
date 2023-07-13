@@ -1,6 +1,5 @@
 package ru.practicum.request.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.event.model.Event;
@@ -25,13 +24,20 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class RequestServiceImpl implements RequestService {
 
     private final RequestRepository requestRepository;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
     private final RequestMapper requestMapper;
+
+    public RequestServiceImpl(RequestRepository requestRepository, UserRepository userRepository,
+                              EventRepository eventRepository, RequestMapper requestMapper) {
+        this.requestRepository = requestRepository;
+        this.userRepository = userRepository;
+        this.eventRepository = eventRepository;
+        this.requestMapper = requestMapper;
+    }
 
     @Override
     public List<ParticipationRequestDto> getUserRequests(long userId) {

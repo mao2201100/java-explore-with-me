@@ -28,7 +28,8 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
 
 
-    public CategoryServiceImpl(EventRepository eventRepository, CategoryMapper categoryMapper, CategoryRepository categoryRepository){
+    public CategoryServiceImpl(EventRepository eventRepository, CategoryMapper categoryMapper,
+                               CategoryRepository categoryRepository) {
         this.eventRepository = eventRepository;
         this.categoryMapper = categoryMapper;
         this.categoryRepository = categoryRepository;

@@ -8,12 +8,8 @@ import ru.practicum.category.model.Category;
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
 
-
     CategoryDto toCategoryDto(Category category);
 
     Category toCategory(NewCategoryDto newCategoryDto);
-    Category toCategory(CategoryDto categoryDto);
-
-    NewCategoryDto toNewCategoryDto(Category category);
 
 }

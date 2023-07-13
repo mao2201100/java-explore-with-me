@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.practicum.category.dto.CategoryDto;
-import ru.practicum.event.model.EventState;
+import ru.practicum.event.model.EventStatatus;
 import ru.practicum.location.dto.LocationDto;
 import ru.practicum.user.dto.UserShortDto;
 
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-public class EventFullDto {
+public class EventDto {
 
     private Long id;
     private String annotation;
@@ -42,7 +42,7 @@ public class EventFullDto {
     private LocalDateTime publishedOn;
 
     private Boolean requestModeration;
-    private EventState state;
+    private EventStatatus state;
     private String title;
     private int views;
 

@@ -72,7 +72,7 @@ public class Event {
     private LocalDateTime publishedDate;
 
     @Enumerated(EnumType.STRING)
-    private EventState state;
+    private EventStatatus state;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "events")
     private List<Compilation> compilations;

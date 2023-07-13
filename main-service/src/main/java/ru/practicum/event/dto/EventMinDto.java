@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-public class EventShortDto {
+public class EventMinDto {
 
     private Long id;
     private String annotation;

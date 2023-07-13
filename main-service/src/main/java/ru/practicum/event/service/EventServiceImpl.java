@@ -14,7 +14,7 @@ import ru.practicum.client.ClientStatistic;
 import ru.practicum.event.dto.*;
 import ru.practicum.event.mapper.EventMapper;
 import ru.practicum.event.model.Event;
-import ru.practicum.event.model.EventState;
+import ru.practicum.event.model.EventStatatus;
 import ru.practicum.event.repo.EventRepository;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
@@ -41,7 +41,6 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
 
 
@@ -57,12 +56,30 @@ public class EventServiceImpl implements EventService {
     private final UserMapper userMapper;
     private final LocationMapper locationMapper;
 
+    public EventServiceImpl(EventMapper eventMapper, EventRepository eventRepository,
+                            CategoryRepository categoryRepository, NamedParameterJdbcTemplate namedJdbcTemplate,
+                            ClientStatistic statClient, CategoryMapper categoryMapper,
+                            UserRepository userRepository, RequestRepository requestRepository,
+                            RequestMapper requestMapper, UserMapper userMapper,LocationMapper locationMapper){
+        this.eventMapper = eventMapper;
+        this.eventRepository = eventRepository;
+        this.categoryRepository = categoryRepository;
+        this.namedJdbcTemplate = namedJdbcTemplate;
+        this.statClient = statClient;
+        this.categoryMapper = categoryMapper;
+        this.userRepository = userRepository;
+        this.requestRepository = requestRepository;
+        this.requestMapper = requestMapper;
+        this.userMapper = userMapper;
+        this.locationMapper = locationMapper;
+    }
+
 
     @Override
-    public List<EventShortDto> getAll(String text, List<Long> categories, Boolean paid,
-                                      LocalDateTime rangeStart, LocalDateTime rangeEnd,
-                                      Boolean onlyAvailable, String sort, Integer from,
-                                      Integer size) {
+    public List<EventMinDto> getAll(String text, List<Long> categories, Boolean paid,
+                                    LocalDateTime rangeStart, LocalDateTime rangeEnd,
+                                    Boolean onlyAvailable, String sort, Integer from,
+                                    Integer size) {
 
         validateParameters(from, size);
         if (categories != null) {
@@ -109,17 +126,17 @@ public class EventServiceImpl implements EventService {
             sql += " AND (requests.amount IS NOT NULL)";
         }
         sql += " LIMIT " + size + " OFFSET " + from;
-        List<EventShortDto> events = namedJdbcTemplate.query(sql, parameters, (rs, rowNum) -> createEventShort(rs));
+        List<EventMinDto> events = namedJdbcTemplate.query(sql, parameters, (rs, rowNum) -> createEventShort(rs));
         if (sort != null) {
             switch (sort) {
                 case "EVENT_DATE":
                     events = events.stream()
-                            .sorted(Comparator.comparing(EventShortDto::getEventDate))
+                            .sorted(Comparator.comparing(EventMinDto::getEventDate))
                             .collect(Collectors.toList());
                     break;
                 case "VIEWS":
                     events = events.stream()
-                            .sorted(Comparator.comparing(EventShortDto::getViews))
+                            .sorted(Comparator.comparing(EventMinDto::getViews))
                             .collect(Collectors.toList());
                     break;
             }
@@ -129,43 +146,43 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto find(long id) {
+    public EventDto find(long id) {
         Event event = findEvent(id);
-        if (event.getState() != EventState.PUBLISHED) {
+        if (event.getState() != EventStatatus.PUBLISHED) {
             log.info("Событие {} не опубликовано", event);
             throw new NotFoundException();
         }
-        EventFullDto eventFullDto = eventMapper.toEventFullDto(event);
-        eventFullDto.setViews(getNumberViews(id));
-        eventFullDto.setConfirmedRequests(getNumberConfirmedRequests(event));
-        log.info("Найдено событие {}", eventFullDto);
-        return eventFullDto;
+        EventDto eventDto = eventMapper.toEventFullDto(event);
+        eventDto.setViews(getNumberViews(id));
+        eventDto.setConfirmedRequests(getNumberConfirmedRequests(event));
+        log.info("Найдено событие {}", eventDto);
+        return eventDto;
     }
 
     @Override
-    public List<EventFullDto> getAdminAllEvents(List<Long> users,
-                                                List<String> states,
-                                                List<Long> categories,
-                                                LocalDateTime rangeStart,
-                                                LocalDateTime rangeEnd,
-                                                int from,
-                                                int size) {
+    public List<EventDto> getAdminAllEvents(List<Long> users,
+                                            List<String> states,
+                                            List<Long> categories,
+                                            LocalDateTime rangeStart,
+                                            LocalDateTime rangeEnd,
+                                            int from,
+                                            int size) {
         validateParameters(from, size);
-        List<EventState> eventStates = new ArrayList<>();
+        List<EventStatatus> eventStatatuses = new ArrayList<>();
         if (states != null) {
             for (String state : states) {
-                EventState eventState = EventState.valueOf(state);
-                eventStates.add(eventState);
+                EventStatatus eventStatatus = EventStatatus.valueOf(state);
+                eventStatatuses.add(eventStatatus);
             }
         }
-        List<EventFullDto> eventsFullDto = new ArrayList<>();
+        List<EventDto> eventsFullDto = new ArrayList<>();
         List<Event> events;
         if (users == null) {
             events = eventRepository.findAll(PageRequest.of(from, size)).getContent();
         } else {
             events = eventRepository.findAllByInitiatorIdInAndStateInAndCategoryIdInAndEventDateIsAfterAndEventDateIsBefore(
                     users,
-                    eventStates,
+                    eventStatatuses,
                     categories,
                     rangeStart,
                     rangeEnd,
@@ -173,17 +190,17 @@ public class EventServiceImpl implements EventService {
         }
         log.info("Получены события {}", events);
         for (Event event : events) {
-            EventFullDto eventFullDto = eventMapper.toEventFullDto(event);
-            eventFullDto.setViews(getNumberViews(event.getId()));
-            eventFullDto.setConfirmedRequests(getNumberConfirmedRequests(event));
-            eventsFullDto.add(eventFullDto);
+            EventDto eventDto = eventMapper.toEventFullDto(event);
+            eventDto.setViews(getNumberViews(event.getId()));
+            eventDto.setConfirmedRequests(getNumberConfirmedRequests(event));
+            eventsFullDto.add(eventDto);
         }
         log.info("Найдены представления событий {}", eventsFullDto);
         return eventsFullDto;
     }
 
     @Override
-    public EventFullDto updateAdminEvent(long eventId, UpdateEventAdminRequest updateRequest) {
+    public EventDto updateAdminEvent(long eventId, ChangeEventAdminRequest updateRequest) {
         Event event = findEvent(eventId);
         if (updateRequest == null) {
             log.info("Не указаны поля для обновления события. Тело запроса пустое");
@@ -191,18 +208,18 @@ public class EventServiceImpl implements EventService {
         }
         String stateAction = updateRequest.getStateAction();
         if (stateAction != null) {
-            if (!event.getState().equals(EventState.PENDING)) {
+            if (!event.getState().equals(EventStatatus.PENDING)) {
                 log.info("Событие можно публиковать или отклонить, только если оно в состоянии ожидания публикации." +
                         "Текущий статус события - {}", event.getState());
                 throw new ConflictException();
             }
             switch (stateAction) {
                 case "PUBLISH_EVENT":
-                    event.setState(EventState.PUBLISHED);
+                    event.setState(EventStatatus.PUBLISHED);
                     event.setPublishedDate(LocalDateTime.now());
                     break;
                 case "REJECT_EVENT":
-                    event.setState(EventState.CANCELED);
+                    event.setState(EventStatatus.CANCELED);
                     break;
             }
         }
@@ -213,7 +230,7 @@ public class EventServiceImpl implements EventService {
                 log.info("Новая дата {} события уже наступила", newEventDate);
                 throw new ValidationException();
             }
-            if (event.getState().equals(EventState.PUBLISHED)) {
+            if (event.getState().equals(EventStatatus.PUBLISHED)) {
                 LocalDateTime publishedDate = event.getPublishedDate();
                 long diff = ChronoUnit.HOURS.between(publishedDate, newEventDate);
                 if (diff >= 0 && diff <= 1) {
@@ -286,7 +303,7 @@ public class EventServiceImpl implements EventService {
 
 
     @Override
-    public List<EventShortDto> getUserEvents(long userId, int from, int size) {
+    public List<EventMinDto> getUserEvents(long userId, int from, int size) {
         User initiator = findUser(userId);
         List<Event> userEvents = eventRepository.findAllByInitiator(initiator, PageRequest.of(from, size));
         log.info("Найдены события {} пользователя {}", userEvents, initiator);
@@ -296,12 +313,12 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto createUserEvent(long userId, NewEventDto newEventDto) {
-        validateNewEventDto(newEventDto);
+    public EventDto createUserEvent(long userId, FreshEventDto freshEventDto) {
+        validateNewEventDto(freshEventDto);
         User initiator = findUser(userId);
-        Event newEvent = eventMapper.toEvent(newEventDto);
+        Event newEvent = eventMapper.toEvent(freshEventDto);
         newEvent.setInitiator(initiator);
-        newEvent.setState(EventState.PENDING);
+        newEvent.setState(EventStatatus.PENDING);
         newEvent.setCreationDate(LocalDateTime.now());
         if (newEvent.getRequestModeration() == null) {
             newEvent.setRequestModeration(true);
@@ -333,7 +350,7 @@ public class EventServiceImpl implements EventService {
 
 
     @Override
-    public EventFullDto findUserEvent(long userId, long eventId) {
+    public EventDto findUserEvent(long userId, long eventId) {
         User initiator = findUser(userId);
         Event foundEvent = findEvent(eventId, initiator);
         log.info("Найдено событие {} от пользователя {}", foundEvent, initiator);
@@ -342,7 +359,7 @@ public class EventServiceImpl implements EventService {
 
 
     @Override
-    public EventFullDto updateUserEvent(long userId, long eventId, UpdateEventUserRequest updateRequest) {
+    public EventDto updateUserEvent(long userId, long eventId, UpdateEventUserRequest updateRequest) {
         User initiator = findUser(userId);
         Event event = findEvent(eventId, initiator);
         if (updateRequest == null) {
@@ -385,7 +402,7 @@ public class EventServiceImpl implements EventService {
                 log.info("Новая дата {} события уже наступила", newEventDate);
                 throw new ValidationException();
             }
-            if (event.getState().equals(EventState.PUBLISHED)) {
+            if (event.getState().equals(EventStatatus.PUBLISHED)) {
                 long diff = ChronoUnit.HOURS.between(newEventDate, LocalDateTime.now());
                 if (diff <= 2) {
                     log.info("дата и время {}, на которые намечено событие, не может быть раньше, чем через два часа от текущего момента {}",
@@ -423,7 +440,7 @@ public class EventServiceImpl implements EventService {
         }
         String stateAction = updateRequest.getStateAction();
         if (stateAction != null) {
-            if (event.getState().equals(EventState.PUBLISHED)) {
+            if (event.getState().equals(EventStatatus.PUBLISHED)) {
                 log.info("Изменить можно только отмененные события или события в состоянии ожидания модерации." +
                                 "Текущий статус - {}",
                         event.getState());
@@ -431,10 +448,10 @@ public class EventServiceImpl implements EventService {
             }
             switch (stateAction) {
                 case "SEND_TO_REVIEW":
-                    event.setState(EventState.PENDING);
+                    event.setState(EventStatatus.PENDING);
                     break;
                 case "CANCEL_REVIEW":
-                    event.setState(EventState.CANCELED);
+                    event.setState(EventStatatus.CANCELED);
                     break;
             }
         }
@@ -515,48 +532,48 @@ public class EventServiceImpl implements EventService {
         return event.get();
     }
 
-    private void validateNewEventDto(NewEventDto newEventDto) {
-        if (newEventDto == null) {
+    private void validateNewEventDto(FreshEventDto freshEventDto) {
+        if (freshEventDto == null) {
             log.info("Не указаны поля для создания нового события. Тело запроса пустое");
             throw new ValidationException();
         }
-        if (newEventDto.getDescription() == null) {
+        if (freshEventDto.getDescription() == null) {
             log.info("Не указано поле 'description' для создания нового события");
             throw new ValidationException();
         }
-        if (newEventDto.getDescription().isBlank()) {
+        if (freshEventDto.getDescription().isBlank()) {
             log.info("Поле 'description' для создания нового события - пустое");
             throw new ValidationException();
         }
-        if (newEventDto.getDescription().length() < 20) {
+        if (freshEventDto.getDescription().length() < 20) {
             log.info("Поле 'description' для создания нового события меньше 20 символов");
             throw new ValidationException();
         }
-        if (newEventDto.getAnnotation() == null) {
+        if (freshEventDto.getAnnotation() == null) {
             log.info("Не указано поле 'annotation' для создания нового события");
             throw new ValidationException();
         }
-        if (newEventDto.getAnnotation().isBlank()) {
+        if (freshEventDto.getAnnotation().isBlank()) {
             log.info("Поле 'annotation' для создания нового события - пустое");
             throw new ValidationException();
         }
-        if (newEventDto.getAnnotation().length() < 20) {
+        if (freshEventDto.getAnnotation().length() < 20) {
             log.info("Поле 'annotation' для создания нового события меньше 20 символов");
             throw new ValidationException();
         }
-        if (newEventDto.getAnnotation().length() > 2000) {
+        if (freshEventDto.getAnnotation().length() > 2000) {
             log.info("Поле 'annotation' для создания нового события больше 2000 символов");
             throw new ValidationException();
         }
-        if (newEventDto.getTitle() == null) {
+        if (freshEventDto.getTitle() == null) {
             log.info("Не указано поле 'title' для создания нового события");
             throw new ValidationException();
         }
-        if (newEventDto.getTitle().length() < 3) {
+        if (freshEventDto.getTitle().length() < 3) {
             log.info("Поле 'title' для создания нового события меньше 3 символов");
             throw new ValidationException();
         }
-        if (newEventDto.getTitle().length() > 120) {
+        if (freshEventDto.getTitle().length() > 120) {
             log.info("Поле 'title' для создания нового события больше 120 символов");
             throw new ValidationException();
         }
@@ -635,11 +652,11 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    private EventShortDto createEventShort(ResultSet rs) throws SQLException {
+    private EventMinDto createEventShort(ResultSet rs) throws SQLException {
         long id = rs.getLong("id");
         LocalDateTime eventDate = LocalDateTime.parse(rs.getString("event_date"),
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        return EventShortDto.builder()
+        return EventMinDto.builder()
                 .id(id)
                 .annotation(rs.getString("annotation"))
                 .category(categoryMapper.toCategoryDto(findCategory(rs.getLong("category_id"))))

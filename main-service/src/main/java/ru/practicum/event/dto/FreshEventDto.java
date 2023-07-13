@@ -8,7 +8,7 @@ import ru.practicum.location.dto.LocationDto;
 @Getter
 @Setter
 @Builder
-public class UpdateEventAdminRequest {
+public class FreshEventDto {
 
     private String annotation;
     private Long category;
@@ -18,7 +18,6 @@ public class UpdateEventAdminRequest {
     private Boolean paid;
     private Integer participantLimit;
     private Boolean requestModeration;
-    private String stateAction;
     private String title;
 
 }

@@ -1,6 +1,5 @@
 package ru.practicum.compilation.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -22,12 +21,18 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class CompilationServiceImpl implements CompilationService {
 
     private final CompilationRepository compilationRepository;
     private final CompilationMapper compilationMapper;
     private final EventRepository eventRepository;
+
+    public CompilationServiceImpl(CompilationRepository compilationRepository, CompilationMapper compilationMapper,
+                                  EventRepository eventRepository) {
+        this.compilationRepository = compilationRepository;
+        this.compilationMapper = compilationMapper;
+        this.eventRepository = eventRepository;
+    }
 
     @Override
     public List<CompilationDto> getCompilations(Boolean pinned, int from, int size) {

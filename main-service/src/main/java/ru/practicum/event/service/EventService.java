@@ -10,25 +10,25 @@ import java.util.List;
 
 public interface EventService {
 
-    List<EventShortDto> getAll(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
-                               LocalDateTime rangeEnd, Boolean onlyAvailable, String sort,
-                               Integer from, Integer size);
+    EventDto createUserEvent(long userId, FreshEventDto freshEventDto);
 
-    EventFullDto find(long id);
+    EventDto findUserEvent(long userId, long eventId);
 
-    List<EventFullDto> getAdminAllEvents(List<Long> users, List<String> states, List<Long> categories,
-                                         LocalDateTime rangeStart, LocalDateTime rangeEnd,
-                                         int from, int size);
+    EventDto updateUserEvent(long userId, long eventId, UpdateEventUserRequest updateRequest);
 
-    EventFullDto updateAdminEvent(long eventId, UpdateEventAdminRequest updateRequest);
+    List<EventMinDto> getAll(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
+                             LocalDateTime rangeEnd, Boolean onlyAvailable, String sort,
+                             Integer from, Integer size);
 
-    List<EventShortDto> getUserEvents(long userId, int from, int size);
+    EventDto find(long id);
 
-    EventFullDto createUserEvent(long userId, NewEventDto newEventDto);
+    List<EventDto> getAdminAllEvents(List<Long> users, List<String> states, List<Long> categories,
+                                     LocalDateTime rangeStart, LocalDateTime rangeEnd,
+                                     int from, int size);
 
-    EventFullDto findUserEvent(long userId, long eventId);
+    EventDto updateAdminEvent(long eventId, ChangeEventAdminRequest updateRequest);
 
-    EventFullDto updateUserEvent(long userId, long eventId, UpdateEventUserRequest updateRequest);
+    List<EventMinDto> getUserEvents(long userId, int from, int size);
 
     List<ParticipationRequestDto> findUserEventRequests(long userId, long eventId);
 

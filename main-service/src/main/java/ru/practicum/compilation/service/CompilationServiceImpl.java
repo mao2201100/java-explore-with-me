@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.compilation.dto.CompilationDto;
-import ru.practicum.compilation.dto.NewCompilationDto;
-import ru.practicum.compilation.dto.UpdateCompilationRequest;
+import ru.practicum.compilation.dto.FreshCompilationDto;
+import ru.practicum.compilation.dto.СhangeCompilationRequest;
 import ru.practicum.compilation.mapper.CompilationMapper;
 import ru.practicum.compilation.model.Compilation;
 import ru.practicum.compilation.repo.CompilationRepository;
@@ -62,23 +62,23 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public CompilationDto createCompilation(NewCompilationDto newCompilationDto) {
-        validateNewCompilation(newCompilationDto);
-        Compilation compilation = compilationMapper.toCompilation(newCompilationDto);
+    public CompilationDto createCompilation(FreshCompilationDto freshCompilationDto) {
+        validateNewCompilation(freshCompilationDto);
+        Compilation compilation = compilationMapper.toCompilation(freshCompilationDto);
         Compilation savedCompilation = compilationRepository.save(compilation);
         log.info("Добавлена новая подборка событий {}", savedCompilation);
         return compilationMapper.toCompilationDto(savedCompilation);
     }
 
-    private void validateNewCompilation(NewCompilationDto newCompilationDto) {
-        if (newCompilationDto.getPinned() == null) {
-            newCompilationDto.setPinned(false);
+    private void validateNewCompilation(FreshCompilationDto freshCompilationDto) {
+        if (freshCompilationDto.getPinned() == null) {
+            freshCompilationDto.setPinned(false);
         }
-        if (newCompilationDto.getTitle() == null || newCompilationDto.getTitle().isBlank()) {
+        if (freshCompilationDto.getTitle() == null || freshCompilationDto.getTitle().isBlank()) {
             log.info("В новой подборке не указан заголовок или он пустой");
             throw new ValidationException();
         }
-        if (newCompilationDto.getTitle().length() > 50) {
+        if (freshCompilationDto.getTitle().length() > 50) {
             log.info("В новой подборке заголовок имеет длину больше 50 символов");
             throw new ValidationException();
         }
@@ -92,7 +92,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public CompilationDto updateCompilation(long compId, UpdateCompilationRequest updateRequest) {
+    public CompilationDto updateCompilation(long compId, СhangeCompilationRequest updateRequest) {
         Compilation foundCompilation = findCompilation(compId);
         if (updateRequest.getPinned() != null) {
             foundCompilation.setPinned(updateRequest.getPinned());

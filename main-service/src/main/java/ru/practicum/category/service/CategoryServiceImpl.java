@@ -39,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto createCategory(NewCategoryDto newCategoryDto) {
         if (newCategoryDto == null) {
-            log.info("Не указаны поля для новой категории. Передано пустое тело запроса");
+            log.info("Передано пустое тело запроса");
             throw new ValidationException();
         }
         Category category = categoryMapper.toCategory(newCategoryDto);

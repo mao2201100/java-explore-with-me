@@ -1,8 +1,8 @@
 package ru.practicum.compilation.service;
 
 import ru.practicum.compilation.dto.CompilationDto;
-import ru.practicum.compilation.dto.NewCompilationDto;
-import ru.practicum.compilation.dto.UpdateCompilationRequest;
+import ru.practicum.compilation.dto.FreshCompilationDto;
+import ru.practicum.compilation.dto.СhangeCompilationRequest;
 
 import java.util.List;
 
@@ -12,10 +12,10 @@ public interface CompilationService {
 
     CompilationDto searchCompilation(long compId);
 
-    CompilationDto createCompilation(NewCompilationDto newCompilationDto);
+    CompilationDto createCompilation(FreshCompilationDto freshCompilationDto);
 
     void deleteCompilation(long compId);
 
-    CompilationDto updateCompilation(long compId, UpdateCompilationRequest updateCompilationRequest);
+    CompilationDto updateCompilation(long compId, СhangeCompilationRequest сhangeCompilationRequest);
 
 }

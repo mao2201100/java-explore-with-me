@@ -1,4 +1,4 @@
-package ru.practicum.compilation.controller;
+package ru.practicum.compilation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.compilation.dto.CompilationDto;
-import ru.practicum.compilation.dto.NewCompilationDto;
-import ru.practicum.compilation.dto.UpdateCompilationRequest;
+import ru.practicum.compilation.dto.FreshCompilationDto;
+import ru.practicum.compilation.dto.СhangeCompilationRequest;
 import ru.practicum.compilation.service.CompilationService;
 
 import java.util.List;
@@ -34,9 +34,9 @@ public class CompilationController {
     }
 
     @PostMapping("/admin/compilations")
-    public ResponseEntity<CompilationDto> createCompilation(@RequestBody NewCompilationDto newCompilationDto) {
-        log.info("Получен POST запрос: /admin/compilations endpoint with body={}", newCompilationDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(compilationService.createCompilation(newCompilationDto));
+    public ResponseEntity<CompilationDto> createCompilation(@RequestBody FreshCompilationDto freshCompilationDto) {
+        log.info("Получен POST запрос: /admin/compilations endpoint with body={}", freshCompilationDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(compilationService.createCompilation(freshCompilationDto));
     }
 
     @DeleteMapping("/admin/compilations/{compId}")
@@ -48,9 +48,9 @@ public class CompilationController {
 
     @PatchMapping("/admin/compilations/{compId}")
     public ResponseEntity<CompilationDto> updateCompilation(@PathVariable Long compId,
-                                                            @RequestBody UpdateCompilationRequest updateCompilationRequest) {
-        log.info("Получен PATCH запрос: /admin/compilations/{} endpoint with body={}", compId, updateCompilationRequest);
-        return ResponseEntity.ok().body(compilationService.updateCompilation(compId, updateCompilationRequest));
+                                                            @RequestBody СhangeCompilationRequest сhangeCompilationRequest) {
+        log.info("Получен PATCH запрос: /admin/compilations/{} endpoint with body={}", compId, сhangeCompilationRequest);
+        return ResponseEntity.ok().body(compilationService.updateCompilation(compId, сhangeCompilationRequest));
     }
 
 }

@@ -72,7 +72,7 @@ public class EventController {
                                                             @RequestParam(defaultValue = "0") Integer from,
                                                             @RequestParam(defaultValue = "10") Integer size,
                                                             @RequestParam(required = false) List<Long> users,
-                                                            @RequestParam(required = false) List<Long> categories,) {
+                                                            @RequestParam(required = false) List<Long> categories) {
         log.info("Получен GET запрос: /admin/events endpoint with parameters " +
                         "users={}, states={}, categories={}, rangeStart={}, rangeEnd={}, from={}, size={}",
                 users, states, categories, rangeStart, rangeEnd, from, size);

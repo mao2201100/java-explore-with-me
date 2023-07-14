@@ -3,7 +3,7 @@ package ru.practicum.request.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.practicum.event.model.Event;
-import ru.practicum.request.dto.ParticipationRequestDto;
+import ru.practicum.request.model.dto.ParticipationRequestDto;
 import ru.practicum.request.model.Request;
 import ru.practicum.user.model.User;
 

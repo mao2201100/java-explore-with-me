@@ -1,9 +1,10 @@
 package ru.practicum.event.service;
 
 import ru.practicum.event.dto.*;
-import ru.practicum.request.dto.EventRequestStatusUpdateRequest;
-import ru.practicum.request.dto.EventRequestStatusUpdateResult;
-import ru.practicum.request.dto.ParticipationRequestDto;
+import ru.practicum.event.model.dto.*;
+import ru.practicum.request.model.dto.EventRequestStatusUpdateRequest;
+import ru.practicum.request.model.dto.EventRequestStatusUpdateResult;
+import ru.practicum.request.model.dto.ParticipationRequestDto;
 
 import java.time.LocalDateTime;
 import java.util.List;

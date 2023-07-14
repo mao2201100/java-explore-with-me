@@ -7,11 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.client.ClientHit;
 import ru.practicum.event.dto.*;
+import ru.practicum.event.model.dto.*;
 import ru.practicum.event.service.EventService;
 import ru.practicum.hit.dto.HitDTO;
-import ru.practicum.request.dto.EventRequestStatusUpdateRequest;
-import ru.practicum.request.dto.EventRequestStatusUpdateResult;
-import ru.practicum.request.dto.ParticipationRequestDto;
+import ru.practicum.request.model.dto.EventRequestStatusUpdateRequest;
+import ru.practicum.request.model.dto.EventRequestStatusUpdateResult;
+import ru.practicum.request.model.dto.ParticipationRequestDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;

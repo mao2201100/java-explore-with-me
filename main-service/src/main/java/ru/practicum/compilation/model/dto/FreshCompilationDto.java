@@ -1,4 +1,4 @@
-package ru.practicum.compilation.dto;
+package ru.practicum.compilation.model.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class UpdateCompilationRequest {
+public class FreshCompilationDto {
 
     private List<Long> events;
     private Boolean pinned;

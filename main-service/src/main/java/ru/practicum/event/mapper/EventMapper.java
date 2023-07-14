@@ -3,9 +3,9 @@ package ru.practicum.event.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.practicum.category.model.Category;
-import ru.practicum.event.dto.EventDto;
-import ru.practicum.event.dto.EventMinDto;
-import ru.practicum.event.dto.FreshEventDto;
+import ru.practicum.event.model.dto.EventDto;
+import ru.practicum.event.model.dto.EventMinDto;
+import ru.practicum.event.model.dto.FreshEventDto;
 import ru.practicum.event.model.Event;
 
 import java.time.LocalDateTime;

@@ -51,20 +51,6 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<ParticipationRequestDto> getUserRequests(long userId) {
-        User requester = findUser(userId);
-        List<Request> userRequests = requestRepository.findAllByRequester(requester);
-        if (userRequests.isEmpty()) {
-            log.info("Не найдены запросы на участие в событиях от пользователя {}", requester);
-            return new ArrayList<>();
-        }
-        log.info("Найдены запросы на участие в событиях {} от пользователя {}", userRequests, requester);
-        return userRequests.stream()
-                .map(requestMapper::toParticipationRequestDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public ParticipationRequestDto createUserRequest(long userId, Long eventId) {
         if (eventId == null) {
             log.info("Не указан обязательный параметр запроса eventId");
@@ -119,6 +105,20 @@ public class RequestServiceImpl implements RequestService {
             throw new NotFoundException();
         }
         return event.get();
+    }
+
+    @Override
+    public List<ParticipationRequestDto> getUserRequests(long userId) {
+        User requester = findUser(userId);
+        List<Request> userRequests = requestRepository.findAllByRequester(requester);
+        if (userRequests.isEmpty()) {
+            log.info("Не найдены запросы на участие в событиях от пользователя {}", requester);
+            return new ArrayList<>();
+        }
+        log.info("Найдены запросы на участие в событиях {} от пользователя {}", userRequests, requester);
+        return userRequests.stream()
+                .map(requestMapper::toParticipationRequestDto)
+                .collect(Collectors.toList());
     }
 
     @Override

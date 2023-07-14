@@ -20,22 +20,22 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUsers(@RequestParam(required = false) List<Long> ids,
+    public ResponseEntity<List<UserDto>> getAll(@RequestParam(required = false) List<Long> ids,
                                                 @RequestParam(defaultValue = "0") Integer from,
                                                 @RequestParam(defaultValue = "10") Integer size) {
-        log.info("Получен GET запрос: /admin/users endpoint");
+        log.info("Received GET-request at /admin/users endpoint");
         return ResponseEntity.ok().body(userService.getAll(ids, from, size));
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody NewUserRequest newUserRequest) {
-        log.info("Получен POST запрос: /admin/users endpoint with body {}", newUserRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(newUserRequest));
+    public ResponseEntity<UserDto> create(@RequestBody NewUserRequest newUserRequest) {
+        log.info("Received POST-request at /admin/users endpoint with body {}", newUserRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(newUserRequest));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<UserDto> deleteUser(@PathVariable("id") Long userId) {
-        log.info("Получен DELETE запрос: /admin/users/{} endpoint", userId);
+        log.info("Received DELETE-request at /admin/users/{} endpoint", userId);
         userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
     }

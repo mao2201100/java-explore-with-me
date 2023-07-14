@@ -20,21 +20,21 @@ public class RequestController {
 
     @GetMapping
     public ResponseEntity<List<ParticipationRequestDto>> getUserRequests(@PathVariable Long userId) {
-        log.info("Получен GET запрос: /users/{}/requests endpoint", userId);
+        log.info("Received GET-request at /users/{}/requests endpoint", userId);
         return ResponseEntity.ok().body(requestService.getUserRequests(userId));
     }
 
     @PostMapping
     public ResponseEntity<ParticipationRequestDto> createUserRequest(@PathVariable Long userId,
                                                                      @RequestParam(required = false) Long eventId) {
-        log.info("Получен POST запрос: /users/{}/requests?eventId={} endpoint", userId, eventId);
+        log.info("Received POST-request at /users/{}/requests?eventId={} endpoint", userId, eventId);
         return ResponseEntity.status(HttpStatus.CREATED).body(requestService.createUserRequest(userId, eventId));
     }
 
     @PatchMapping("{requestId}/cancel")
     public ResponseEntity<ParticipationRequestDto> cancelUserRequest(@PathVariable Long userId,
                                                                      @PathVariable Long requestId) {
-        log.info("Получен PATCH запрос: /users/{}/requests/{}/cancel endpoint", userId, requestId);
+        log.info("Received PATCH-request at /users/{}/requests/{}/cancel endpoint", userId, requestId);
         return ResponseEntity.ok().body(requestService.cancelUserRequest(userId, requestId));
     }
 

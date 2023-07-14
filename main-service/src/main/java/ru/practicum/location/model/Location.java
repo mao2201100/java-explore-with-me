@@ -3,6 +3,7 @@ package ru.practicum.location.model;
 import lombok.*;
 
 import javax.persistence.*;
+
 @Entity
 @Getter
 @Setter

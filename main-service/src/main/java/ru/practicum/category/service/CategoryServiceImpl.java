@@ -1,16 +1,15 @@
 package ru.practicum.category.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.practicum.category.dto.CategoryDto;
-import ru.practicum.category.dto.NewCategoryDto;
 import ru.practicum.category.mapper.CategoryMapper;
 import ru.practicum.category.model.Category;
-import ru.practicum.category.repo.CategoryRepository;
+import ru.practicum.category.model.dto.CategoryDto;
+import ru.practicum.category.model.dto.NewCategoryDto;
+import ru.practicum.category.repository.CategoryRepository;
 import ru.practicum.event.model.Event;
-import ru.practicum.event.repo.EventRepository;
+import ru.practicum.event.repository.EventRepository;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.exception.ValidationException;
@@ -21,18 +20,26 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
     private final EventRepository eventRepository;
+
     private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
+
+
+    public CategoryServiceImpl(EventRepository eventRepository, CategoryMapper categoryMapper,
+                               CategoryRepository categoryRepository) {
+        this.eventRepository = eventRepository;
+        this.categoryMapper = categoryMapper;
+        this.categoryRepository = categoryRepository;
+    }
 
 
     @Override
     public CategoryDto createCategory(NewCategoryDto newCategoryDto) {
         if (newCategoryDto == null) {
-            log.info("Не указаны поля для новой категории. Передано пустое тело запроса");
+            log.info("Передано пустое тело запроса");
             throw new ValidationException();
         }
         Category category = categoryMapper.toCategory(newCategoryDto);

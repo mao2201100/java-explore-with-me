@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class NewCompilationDto {
+public class FreshCompilationDto {
 
     private List<Long> events;
     private Boolean pinned;

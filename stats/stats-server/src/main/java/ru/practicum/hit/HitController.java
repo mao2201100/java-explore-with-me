@@ -16,7 +16,6 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping
 public class HitController {
 
     private final HitService hitService;

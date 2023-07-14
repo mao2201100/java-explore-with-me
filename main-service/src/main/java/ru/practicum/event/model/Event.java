@@ -72,12 +72,24 @@ public class Event {
     private LocalDateTime publishedDate;
 
     @Enumerated(EnumType.STRING)
-    private EventState state;
+    private EventStatatus state;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "events")
     private List<Compilation> compilations;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Request> requests;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Event)) return false;
+        return id != null && id.equals(((Event) o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 
 }

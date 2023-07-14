@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.event.model.Event;
-import ru.practicum.event.model.EventState;
+import ru.practicum.event.model.EventStatatus;
 import ru.practicum.event.repo.EventRepository;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
@@ -75,7 +75,7 @@ public class RequestServiceImpl implements RequestService {
             log.info("Инициатор события {} не может добавить запрос на участие в своём событии {}", requester, event);
             throw new ConflictException();
         }
-        if (!event.getState().equals(EventState.PUBLISHED)) {
+        if (!event.getState().equals(EventStatatus.PUBLISHED)) {
             log.info("Нельзя участвовать в неопубликованном событии {}", event);
             throw new ConflictException();
         }

@@ -2,7 +2,6 @@ package ru.practicum.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-public class EventShortDto {
+public class EventMinDto {
 
     private Long id;
     private String annotation;

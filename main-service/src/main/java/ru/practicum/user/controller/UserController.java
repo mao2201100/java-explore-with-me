@@ -30,7 +30,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody NewUserRequest newUserRequest) {
         log.info("Получен POST запрос: /admin/users endpoint with body {}", newUserRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(newUserRequest));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(newUserRequest));
     }
 
     @DeleteMapping("/{id}")

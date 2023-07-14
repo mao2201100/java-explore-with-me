@@ -39,17 +39,6 @@ public class RequestServiceImpl implements RequestService {
         this.requestMapper = requestMapper;
     }
 
-    private User findUser(long userId) {
-        if (userId == 0) {
-            throw new ValidationException();
-        }
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty()) {
-            throw new NotFoundException();
-        }
-        return user.get();
-    }
-
     @Override
     public List<ParticipationRequestDto> getUserRequests(long userId) {
         User requester = findUser(userId);
@@ -62,6 +51,17 @@ public class RequestServiceImpl implements RequestService {
         return userRequests.stream()
                 .map(requestMapper::toParticipationRequestDto)
                 .collect(Collectors.toList());
+    }
+
+    private User findUser(long userId) {
+        if (userId == 0) {
+            throw new ValidationException();
+        }
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new NotFoundException();
+        }
+        return user.get();
     }
 
     @Override

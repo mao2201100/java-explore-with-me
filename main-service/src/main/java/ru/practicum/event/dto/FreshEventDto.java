@@ -3,7 +3,7 @@ package ru.practicum.event.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import ru.practicum.location.dto.LocationDto;
+import ru.practicum.location.model.dto.LocationDto;
 
 @Getter
 @Setter

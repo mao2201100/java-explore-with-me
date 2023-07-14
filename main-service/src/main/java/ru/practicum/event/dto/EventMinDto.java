@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.practicum.category.model.dto.CategoryDto;
-import ru.practicum.user.dto.UserShortDto;
+import ru.practicum.user.model.dto.UserShortDto;
 
 import java.time.LocalDateTime;
 

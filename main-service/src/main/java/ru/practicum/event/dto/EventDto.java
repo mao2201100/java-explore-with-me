@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-import ru.practicum.category.dto.CategoryDto;
+import ru.practicum.category.model.dto.CategoryDto;
 import ru.practicum.event.model.EventStatatus;
 import ru.practicum.location.dto.LocationDto;
 import ru.practicum.user.dto.UserShortDto;

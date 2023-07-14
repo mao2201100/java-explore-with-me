@@ -9,9 +9,9 @@ import ru.practicum.location.model.Location;
 import ru.practicum.request.model.Request;
 import ru.practicum.user.model.User;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
-import javax.persistence.*;
 
 @Entity
 @Getter

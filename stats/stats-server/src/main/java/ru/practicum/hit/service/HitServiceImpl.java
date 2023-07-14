@@ -1,15 +1,15 @@
 package ru.practicum.hit.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Service;
+import ru.practicum.exception.ValidationException;
 import ru.practicum.hit.dto.HitDTO;
 import ru.practicum.hit.mapper.HitMapper;
 import ru.practicum.hit.model.Hit;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import ru.practicum.statisticsDto.ViewStatsDTO;
-import ru.practicum.exception.ValidationException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

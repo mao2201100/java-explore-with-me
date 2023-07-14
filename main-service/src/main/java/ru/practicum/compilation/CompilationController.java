@@ -1,12 +1,11 @@
-package ru.practicum.compilation.controller;
+package ru.practicum.compilation;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.compilation.dto.CompilationDto;
-import ru.practicum.compilation.dto.NewCompilationDto;
+import ru.practicum.compilation.dto.FreshCompilationDto;
 import ru.practicum.compilation.dto.UpdateCompilationRequest;
 import ru.practicum.compilation.service.CompilationService;
 
@@ -14,10 +13,13 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequiredArgsConstructor
 public class CompilationController {
 
     private final CompilationService compilationService;
+
+    public CompilationController(CompilationService compilationService) {
+        this.compilationService = compilationService;
+    }
 
     @GetMapping("/compilations")
     public ResponseEntity<List<CompilationDto>> getCompilations(@RequestParam(required = false) Boolean pinned,
@@ -34,9 +36,9 @@ public class CompilationController {
     }
 
     @PostMapping("/admin/compilations")
-    public ResponseEntity<CompilationDto> createCompilation(@RequestBody NewCompilationDto newCompilationDto) {
-        log.info("Получен POST запрос: /admin/compilations endpoint with body={}", newCompilationDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(compilationService.createCompilation(newCompilationDto));
+    public ResponseEntity<CompilationDto> createCompilation(@RequestBody FreshCompilationDto freshCompilationDto) {
+        log.info("Получен POST запрос: /admin/compilations endpoint with body={}", freshCompilationDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(compilationService.createCompilation(freshCompilationDto));
     }
 
     @DeleteMapping("/admin/compilations/{compId}")

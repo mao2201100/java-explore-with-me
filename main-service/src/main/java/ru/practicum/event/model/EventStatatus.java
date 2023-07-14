@@ -1,6 +1,6 @@
 package ru.practicum.event.model;
 
-public enum EventState {
+public enum EventStatatus {
 
     PENDING,
     PUBLISHED,

@@ -73,6 +73,19 @@ public class EventServiceImpl implements EventService {
         this.locationMapper = locationMapper;
     }
 
+    @Override
+    public EventDto find(long id) {
+        Event event = findEvent(id);
+        if (event.getState() != EventStatatus.PUBLISHED) {
+            log.info("Событие {} не опубликовано", event);
+            throw new NotFoundException();
+        }
+        EventDto eventDto = eventMapper.toEventFullDto(event);
+        eventDto.setViews(getNumberViews(id));
+        eventDto.setConfirmedRequests(getNumberConfirmedRequests(event));
+        log.info("Найдено событие {}", eventDto);
+        return eventDto;
+    }
 
     @Override
     public List<EventMinDto> getAll(String text, List<Long> categories, Boolean paid,
@@ -142,20 +155,6 @@ public class EventServiceImpl implements EventService {
         }
         log.info("Найдены события {}", events);
         return events;
-    }
-
-    @Override
-    public EventDto find(long id) {
-        Event event = findEvent(id);
-        if (event.getState() != EventStatatus.PUBLISHED) {
-            log.info("Событие {} не опубликовано", event);
-            throw new NotFoundException();
-        }
-        EventDto eventDto = eventMapper.toEventFullDto(event);
-        eventDto.setViews(getNumberViews(id));
-        eventDto.setConfirmedRequests(getNumberConfirmedRequests(event));
-        log.info("Найдено событие {}", eventDto);
-        return eventDto;
     }
 
     @Override

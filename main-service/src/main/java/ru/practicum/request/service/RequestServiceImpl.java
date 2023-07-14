@@ -1,6 +1,5 @@
 package ru.practicum.request.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.event.model.Event;
@@ -25,13 +24,31 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class RequestServiceImpl implements RequestService {
 
     private final RequestRepository requestRepository;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
     private final RequestMapper requestMapper;
+
+    public RequestServiceImpl(RequestRepository requestRepository, UserRepository userRepository,
+                              EventRepository eventRepository, RequestMapper requestMapper) {
+        this.requestRepository = requestRepository;
+        this.userRepository = userRepository;
+        this.eventRepository = eventRepository;
+        this.requestMapper = requestMapper;
+    }
+
+    private User findUser(long userId) {
+        if (userId == 0) {
+            throw new ValidationException();
+        }
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new NotFoundException();
+        }
+        return user.get();
+    }
 
     @Override
     public List<ParticipationRequestDto> getUserRequests(long userId) {
@@ -45,17 +62,6 @@ public class RequestServiceImpl implements RequestService {
         return userRequests.stream()
                 .map(requestMapper::toParticipationRequestDto)
                 .collect(Collectors.toList());
-    }
-
-    private User findUser(long userId) {
-        if (userId == 0) {
-            throw new ValidationException();
-        }
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty()) {
-            throw new NotFoundException();
-        }
-        return user.get();
     }
 
     @Override
@@ -97,6 +103,13 @@ public class RequestServiceImpl implements RequestService {
         return requestMapper.toParticipationRequestDto(savedRequest);
     }
 
+    private boolean eventParticipantLimitReached(Event event) {
+        long numberConfirmedRequests = event.getRequests().stream()
+                .filter(request -> request.getStatus().equals(RequestStatus.CONFIRMED))
+                .count();
+        return numberConfirmedRequests != 0 && numberConfirmedRequests >= event.getParticipantLimit();
+    }
+
     private Event findEvent(long eventId) {
         if (eventId == 0) {
             throw new ValidationException();
@@ -106,13 +119,6 @@ public class RequestServiceImpl implements RequestService {
             throw new NotFoundException();
         }
         return event.get();
-    }
-
-    private boolean eventParticipantLimitReached(Event event) {
-        long numberConfirmedRequests = event.getRequests().stream()
-                .filter(request -> request.getStatus().equals(RequestStatus.CONFIRMED))
-                .count();
-        return numberConfirmedRequests != 0 && numberConfirmedRequests >= event.getParticipantLimit();
     }
 
     @Override

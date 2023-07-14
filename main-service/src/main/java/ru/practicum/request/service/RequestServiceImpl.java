@@ -39,6 +39,20 @@ public class RequestServiceImpl implements RequestService {
         this.requestMapper = requestMapper;
     }
 
+    @Override
+    public List<ParticipationRequestDto> getUserRequests(long userId) {
+        User requester = findUser(userId);
+        List<Request> userRequests = requestRepository.findAllByRequester(requester);
+        if (userRequests.isEmpty()) {
+            log.info("Не найдены запросы на участие в событиях от пользователя {}", requester);
+            return new ArrayList<>();
+        }
+        log.info("Найдены запросы на участие в событиях {} от пользователя {}", userRequests, requester);
+        return userRequests.stream()
+                .map(requestMapper::toParticipationRequestDto)
+                .collect(Collectors.toList());
+    }
+
     private User findUser(long userId) {
         if (userId == 0) {
             throw new ValidationException();
@@ -105,20 +119,6 @@ public class RequestServiceImpl implements RequestService {
             throw new NotFoundException();
         }
         return event.get();
-    }
-
-    @Override
-    public List<ParticipationRequestDto> getUserRequests(long userId) {
-        User requester = findUser(userId);
-        List<Request> userRequests = requestRepository.findAllByRequester(requester);
-        if (userRequests.isEmpty()) {
-            log.info("Не найдены запросы на участие в событиях от пользователя {}", requester);
-            return new ArrayList<>();
-        }
-        log.info("Найдены запросы на участие в событиях {} от пользователя {}", userRequests, requester);
-        return userRequests.stream()
-                .map(requestMapper::toParticipationRequestDto)
-                .collect(Collectors.toList());
     }
 
     @Override

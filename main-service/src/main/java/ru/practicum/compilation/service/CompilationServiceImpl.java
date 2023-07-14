@@ -8,9 +8,9 @@ import ru.practicum.compilation.dto.FreshCompilationDto;
 import ru.practicum.compilation.dto.UpdateCompilationRequest;
 import ru.practicum.compilation.mapper.CompilationMapper;
 import ru.practicum.compilation.model.Compilation;
-import ru.practicum.compilation.repo.CompilationRepository;
+import ru.practicum.compilation.repository.CompilationRepository;
 import ru.practicum.event.model.Event;
-import ru.practicum.event.repo.EventRepository;
+import ru.practicum.event.repository.EventRepository;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.exception.ValidationException;
 

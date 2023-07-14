@@ -12,7 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.user.mapper.UserMapper;
 import ru.practicum.user.model.User;
-import ru.practicum.user.repo.UserRepository;
+import ru.practicum.user.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;

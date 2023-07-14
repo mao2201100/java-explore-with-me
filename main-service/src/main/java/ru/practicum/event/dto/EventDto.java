@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 public class EventDto {
 
-    private Long id;
+    //private Long id;
     private String annotation;
     private CategoryDto category;
     private int confirmedRequests;

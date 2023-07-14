@@ -66,13 +66,13 @@ public class EventController {
     }
 
     @GetMapping("/admin/events")
-    public ResponseEntity<List<EventDto>> getAdminAllEvents(@RequestParam(required = false) List<Long> users,
-                                                            @RequestParam(required = false) List<String> states,
-                                                            @RequestParam(required = false) List<Long> categories,
+    public ResponseEntity<List<EventDto>> getAdminAllEvents(@RequestParam(required = false) List<String> states,
                                                             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
                                                             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
                                                             @RequestParam(defaultValue = "0") Integer from,
-                                                            @RequestParam(defaultValue = "10") Integer size) {
+                                                            @RequestParam(defaultValue = "10") Integer size,
+                                                            @RequestParam(required = false) List<Long> users,
+                                                            @RequestParam(required = false) List<Long> categories,) {
         log.info("Получен GET запрос: /admin/events endpoint with parameters " +
                         "users={}, states={}, categories={}, rangeStart={}, rangeEnd={}, from={}, size={}",
                 users, states, categories, rangeStart, rangeEnd, from, size);

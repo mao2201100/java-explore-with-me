@@ -41,7 +41,7 @@ public interface EventMapper {
         return category.getId();
     }
 
-    default LocalDateTime mapToLocalDateTime(LocalDateTime localDateTime) { //
+    default LocalDateTime mapToLocalDateTime(LocalDateTime localDateTime) {
         if (localDateTime == null) {
             return null;
         }

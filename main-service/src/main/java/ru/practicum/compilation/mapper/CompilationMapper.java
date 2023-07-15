@@ -1,9 +1,9 @@
 package ru.practicum.compilation.mapper;
 
 import org.mapstruct.Mapper;
-import ru.practicum.compilation.dto.CompilationDto;
-import ru.practicum.compilation.dto.NewCompilationDto;
 import ru.practicum.compilation.model.Compilation;
+import ru.practicum.compilation.model.dto.CompilationDto;
+import ru.practicum.compilation.model.dto.FreshCompilationDto;
 import ru.practicum.event.model.Event;
 
 import java.util.ArrayList;
@@ -16,9 +16,8 @@ public interface CompilationMapper {
 
     CompilationDto toCompilationDto(Compilation compilation);
 
-    Compilation toCompilation(NewCompilationDto newCompilationDto);
+    Compilation toCompilation(FreshCompilationDto freshCompilationDto);
 
-    NewCompilationDto toNewCompilationDto(Compilation compilation);
 
     default List<Event> mapIdToEvent(List<Long> eventsId) {
         List<Event> events = new ArrayList<>();

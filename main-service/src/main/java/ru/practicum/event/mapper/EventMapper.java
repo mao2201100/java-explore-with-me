@@ -3,10 +3,10 @@ package ru.practicum.event.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.practicum.category.model.Category;
-import ru.practicum.event.dto.EventFullDto;
-import ru.practicum.event.dto.EventShortDto;
-import ru.practicum.event.dto.NewEventDto;
 import ru.practicum.event.model.Event;
+import ru.practicum.event.model.dto.EventDto;
+import ru.practicum.event.model.dto.EventMinDto;
+import ru.practicum.event.model.dto.FreshEventDto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,20 +16,20 @@ public interface EventMapper {
 
     @Mapping(target = "creationDate", source = "createdOn")
     @Mapping(target = "publishedDate", source = "publishedOn")
-    Event toEvent(EventFullDto eventFullDto);
+    Event toEvent(EventDto eventDto);
 
     @Mapping(target = "createdOn", source = "creationDate")
     @Mapping(target = "publishedOn", source = "publishedDate")
-    EventFullDto toEventFullDto(Event event);
+    EventDto toEventFullDto(Event event);
 
-    Event toEvent(EventShortDto eventShortDto);
+    Event toEvent(EventMinDto eventMinDto);
 
-    EventShortDto toEventShortDto(Event event);
+    EventMinDto toEventShortDto(Event event);
 
     @Mapping(target = "eventDate", source = "eventDate", dateFormat = "yyyy-MM-dd HH:mm:ss")
-    Event toEvent(NewEventDto newEventDto);
+    Event toEvent(FreshEventDto freshEventDto);
 
-    NewEventDto toNewEventDto(Event event);
+    FreshEventDto toNewEventDto(Event event);
 
     default Category mapIdToCategory(Long catId) {
         return Category.builder()

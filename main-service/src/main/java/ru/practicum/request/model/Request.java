@@ -5,8 +5,8 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.practicum.event.model.Event;
 import ru.practicum.user.model.User;
-import javax.persistence.*;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity

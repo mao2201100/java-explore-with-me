@@ -1,21 +1,20 @@
 package ru.practicum.request.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.event.model.Event;
-import ru.practicum.event.model.EventState;
-import ru.practicum.event.repo.EventRepository;
+import ru.practicum.event.model.EventStatatus;
+import ru.practicum.event.repository.EventRepository;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.exception.ValidationException;
-import ru.practicum.request.dto.ParticipationRequestDto;
 import ru.practicum.request.mapper.RequestMapper;
 import ru.practicum.request.model.Request;
 import ru.practicum.request.model.RequestStatus;
-import ru.practicum.request.repo.RequestRepository;
+import ru.practicum.request.model.dto.ParticipationRequestDto;
+import ru.practicum.request.repository.RequestRepository;
 import ru.practicum.user.model.User;
-import ru.practicum.user.repo.UserRepository;
+import ru.practicum.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,13 +24,20 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class RequestServiceImpl implements RequestService {
 
     private final RequestRepository requestRepository;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
     private final RequestMapper requestMapper;
+
+    public RequestServiceImpl(RequestRepository requestRepository, UserRepository userRepository,
+                              EventRepository eventRepository, RequestMapper requestMapper) {
+        this.requestRepository = requestRepository;
+        this.userRepository = userRepository;
+        this.eventRepository = eventRepository;
+        this.requestMapper = requestMapper;
+    }
 
     @Override
     public List<ParticipationRequestDto> getUserRequests(long userId) {
@@ -75,7 +81,7 @@ public class RequestServiceImpl implements RequestService {
             log.info("Инициатор события {} не может добавить запрос на участие в своём событии {}", requester, event);
             throw new ConflictException();
         }
-        if (!event.getState().equals(EventState.PUBLISHED)) {
+        if (!event.getState().equals(EventStatatus.PUBLISHED)) {
             log.info("Нельзя участвовать в неопубликованном событии {}", event);
             throw new ConflictException();
         }
@@ -97,6 +103,13 @@ public class RequestServiceImpl implements RequestService {
         return requestMapper.toParticipationRequestDto(savedRequest);
     }
 
+    private boolean eventParticipantLimitReached(Event event) {
+        long numberConfirmedRequests = event.getRequests().stream()
+                .filter(request -> request.getStatus().equals(RequestStatus.CONFIRMED))
+                .count();
+        return numberConfirmedRequests != 0 && numberConfirmedRequests >= event.getParticipantLimit();
+    }
+
     private Event findEvent(long eventId) {
         if (eventId == 0) {
             throw new ValidationException();
@@ -106,13 +119,6 @@ public class RequestServiceImpl implements RequestService {
             throw new NotFoundException();
         }
         return event.get();
-    }
-
-    private boolean eventParticipantLimitReached(Event event) {
-        long numberConfirmedRequests = event.getRequests().stream()
-                .filter(request -> request.getStatus().equals(RequestStatus.CONFIRMED))
-                .count();
-        return numberConfirmedRequests != 0 && numberConfirmedRequests >= event.getParticipantLimit();
     }
 
     @Override

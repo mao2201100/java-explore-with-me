@@ -1,17 +1,16 @@
 package ru.practicum.compilation.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.practicum.compilation.dto.CompilationDto;
-import ru.practicum.compilation.dto.NewCompilationDto;
-import ru.practicum.compilation.dto.UpdateCompilationRequest;
 import ru.practicum.compilation.mapper.CompilationMapper;
 import ru.practicum.compilation.model.Compilation;
-import ru.practicum.compilation.repo.CompilationRepository;
+import ru.practicum.compilation.model.dto.CompilationDto;
+import ru.practicum.compilation.model.dto.FreshCompilationDto;
+import ru.practicum.compilation.model.dto.UpdateCompilationRequest;
+import ru.practicum.compilation.repository.CompilationRepository;
 import ru.practicum.event.model.Event;
-import ru.practicum.event.repo.EventRepository;
+import ru.practicum.event.repository.EventRepository;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.exception.ValidationException;
 
@@ -22,12 +21,18 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class CompilationServiceImpl implements CompilationService {
 
     private final CompilationRepository compilationRepository;
     private final CompilationMapper compilationMapper;
     private final EventRepository eventRepository;
+
+    public CompilationServiceImpl(CompilationRepository compilationRepository, CompilationMapper compilationMapper,
+                                  EventRepository eventRepository) {
+        this.compilationRepository = compilationRepository;
+        this.compilationMapper = compilationMapper;
+        this.eventRepository = eventRepository; //
+    }
 
     @Override
     public List<CompilationDto> getCompilations(Boolean pinned, int from, int size) {
@@ -62,23 +67,23 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public CompilationDto createCompilation(NewCompilationDto newCompilationDto) {
-        validateNewCompilation(newCompilationDto);
-        Compilation compilation = compilationMapper.toCompilation(newCompilationDto);
+    public CompilationDto createCompilation(FreshCompilationDto freshCompilationDto) {
+        validateNewCompilation(freshCompilationDto);
+        Compilation compilation = compilationMapper.toCompilation(freshCompilationDto);
         Compilation savedCompilation = compilationRepository.save(compilation);
         log.info("Добавлена новая подборка событий {}", savedCompilation);
         return compilationMapper.toCompilationDto(savedCompilation);
     }
 
-    private void validateNewCompilation(NewCompilationDto newCompilationDto) {
-        if (newCompilationDto.getPinned() == null) {
-            newCompilationDto.setPinned(false);
+    private void validateNewCompilation(FreshCompilationDto freshCompilationDto) {
+        if (freshCompilationDto.getPinned() == null) {
+            freshCompilationDto.setPinned(false);
         }
-        if (newCompilationDto.getTitle() == null || newCompilationDto.getTitle().isBlank()) {
+        if (freshCompilationDto.getTitle() == null || freshCompilationDto.getTitle().isBlank()) {
             log.info("В новой подборке не указан заголовок или он пустой");
             throw new ValidationException();
         }
-        if (newCompilationDto.getTitle().length() > 50) {
+        if (freshCompilationDto.getTitle().length() > 50) {
             log.info("В новой подборке заголовок имеет длину больше 50 символов");
             throw new ValidationException();
         }

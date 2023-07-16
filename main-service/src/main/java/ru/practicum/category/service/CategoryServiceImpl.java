@@ -3,6 +3,7 @@ package ru.practicum.category.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.category.mapper.CategoryMapper;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.model.dto.CategoryDto;
@@ -27,7 +28,6 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
 
-
     public CategoryServiceImpl(EventRepository eventRepository, CategoryMapper categoryMapper,
                                CategoryRepository categoryRepository) {
         this.eventRepository = eventRepository;
@@ -37,6 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     @Override
+    @Transactional
     public CategoryDto createCategory(NewCategoryDto newCategoryDto) {
         if (newCategoryDto == null) {
             log.info("Передано пустое тело запроса");
@@ -51,6 +52,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public CategoryDto updateCategory(long catId, NewCategoryDto newCategoryDto) {
         Category category = findCategory(catId);
         validateToUpdate(newCategoryDto);
@@ -63,6 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public void deleteCategory(long catId) {
         Category category = findCategory(catId);
         findEventsByCategory(category);

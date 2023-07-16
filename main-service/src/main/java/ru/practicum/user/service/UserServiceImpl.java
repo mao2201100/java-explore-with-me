@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.exception.ValidationException;
@@ -53,6 +54,8 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    @Transactional
     public UserDto createUser(NewUserRequest newUserRequest) {
         User user = userMapper.toUser(newUserRequest);
         validateToCreate(user);

@@ -6,6 +6,7 @@ package ru.practicum.compilation.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.compilation.mapper.CompilationMapper;
 import ru.practicum.compilation.model.Compilation;
 import ru.practicum.compilation.model.dto.CompilationDto;
@@ -72,6 +73,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public CompilationDto createCompilation(FreshCompilationDto freshCompilationDto) {
         validateNewCompilation(freshCompilationDto);
         Compilation compilation = compilationMapper.toCompilation(freshCompilationDto);

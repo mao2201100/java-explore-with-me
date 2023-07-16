@@ -2,6 +2,7 @@ package ru.practicum.request.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.EventStatatus;
 import ru.practicum.event.repository.EventRepository;
@@ -65,6 +66,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional
     public ParticipationRequestDto createUserRequest(long userId, Long eventId) {
         if (eventId == null) {
             log.info("Не указан обязательный параметр запроса eventId");

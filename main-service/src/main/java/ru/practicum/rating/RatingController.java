@@ -43,6 +43,7 @@ public class RatingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ratingService.createEventsLike(userId, eventIds));
     }
 
+
     @PostMapping("/users/{userId}/dislikes")
     public ResponseEntity<EventsRating> addEventsDislike(@PathVariable Long userId,
                                                          @RequestParam(required = false) List<Long> eventIds) {

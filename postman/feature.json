@@ -129,7 +129,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"annotation\": \"Поездка на пикник.\",\r\n    \"category\": 1,\r\n    \"description\": \"Пикник будет\",\r\n    \"eventDate\": \"2024-12-31 15:10:05\",\r\n    \"location\": {\r\n        \"lat\": 55.754167,\r\n        \"lon\": 37.62\r\n    },\r\n    \"paid\": true,\r\n    \"participantLimit\": 10,\r\n    \"requestModeration\": false,\r\n    \"title\": \"Пикник\"\r\n}",
+          "raw": "{\r\n    \"annotation\": \"Поездка на пикник за город.\",\r\n    \"category\": 1,\r\n    \"description\": \"Пикник будет классным.\",\r\n    \"eventDate\": \"2024-12-31 15:10:05\",\r\n    \"location\": {\r\n        \"lat\": 55.754167,\r\n        \"lon\": 37.62\r\n    },\r\n    \"paid\": true,\r\n    \"participantLimit\": 10,\r\n    \"requestModeration\": false,\r\n    \"title\": \"Пикник\"\r\n}",
           "options": {
             "raw": {
               "language": "json"

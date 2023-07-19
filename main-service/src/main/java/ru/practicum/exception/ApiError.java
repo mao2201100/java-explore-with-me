@@ -1,7 +1,6 @@
 package ru.practicum.exception;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;

@@ -129,7 +129,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"annotation\": \"Поездка на пикник\",\r\n    \"category\": 1,\r\n    \"description\": \"Поездка на пикник обещает быть увлекательной.\",\r\n    \"eventDate\": \"2023-09-09 10:10:01\",\r\n    \"location\": {\r\n        \"lat\": 55.623327,\r\n        \"lon\": 37.683863\r\n    },\r\n    \"paid\": true,\r\n    \"participantLimit\": 10,\r\n    \"requestModeration\": false,\r\n    \"title\": \"Поездка на пикник\"\r\n}",
+					"raw": "{\r\n    \"annotation\": \"Поездка на пикник\",\r\n    \"category\": 1,\r\n    \"description\": \"Поездка на пикник обещает быть увлекательной.\",\r\n    \"eventDate\": \"2023-09-09 10:10:01\",\r\n    \"location\": {\r\n        \"lat\": 55.623327,\r\n        \"lon\": 37.68\r\n    },\r\n    \"paid\": false,\r\n    \"participantLimit\": 10,\r\n    \"requestModeration\": false,\r\n    \"title\": \"Поездка на пикник\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -806,7 +806,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"mikhail.zykin@practicummail.ru\",\r\n    \"name\": \"Михаил Зыкин\"\r\n}",
+					"raw": "{\r\n    \"email\": \"mikhail.smirnov@mail.ru\",\r\n    \"name\": \"Михаил Смирнов\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -946,7 +946,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"annotation\": \"Поездка на пикник\",\r\n    \"category\": 1,\r\n    \"description\": \"Поезда на пикник обещает быть увлекательной.\",\r\n    \"eventDate\": \"2023-12-31 15:10:05\",\r\n    \"location\": {\r\n        \"lat\": 55.754167,\r\n        \"lon\": 37.62\r\n    },\r\n    \"paid\": true,\r\n    \"participantLimit\": 10,\r\n    \"requestModeration\": false,\r\n    \"title\": \"Сплав на байдарках\"\r\n}",
+					"raw": "{\r\n    \"annotation\": \"Поездка на пикник\",\r\n    \"category\": 1,\r\n    \"description\": \"Поезда на пикник обещает быть увлекательной.\",\r\n    \"eventDate\": \"2023-12-31 15:10:05\",\r\n    \"location\": {\r\n        \"lat\": 55.754167,\r\n        \"lon\": 37.62\r\n    },\r\n    \"paid\": true,\r\n    \"participantLimit\": 10,\r\n    \"requestModeration\": false,\r\n    \"title\": \"Поездка на пикник\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

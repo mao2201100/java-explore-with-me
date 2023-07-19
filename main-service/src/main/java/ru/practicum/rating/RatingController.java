@@ -29,6 +29,7 @@ public class RatingController {
         return ResponseEntity.ok().body(ratingService.getEventRating(top));
     }
 
+
     @GetMapping("/rating/user")
     public ResponseEntity<UserTopRating> getUserRating(@RequestParam(defaultValue = "3") Integer top) {
         log.info("Получен GET запрос: /rating/user?top={} endpoint", top);

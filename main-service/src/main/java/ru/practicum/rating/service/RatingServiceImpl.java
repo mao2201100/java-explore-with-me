@@ -53,6 +53,17 @@ public class RatingServiceImpl implements RatingService {
         User user = findUser(userId);
         Event event = findEvent(eventId);
         checkUserTookPartInEvent(user, event);
+        int rating = getUserEventRating(userId, eventId);
+        switch (rating) {
+            case -1:
+                deleteUserRatings(userId, List.of(eventId));
+            case 0:
+                createLikes(userId, List.of(eventId));
+                break;
+            case 1:
+                log.info("Пользователь {} уже добавлял лайк событию {}", user, event);
+                throw new ConflictException();
+        }
         return EventRating.builder()
                 .event(eventMapper.toEventShortDto(event))
                 .rating("like")
@@ -167,6 +178,17 @@ public class RatingServiceImpl implements RatingService {
         User user = findUser(userId);
         Event event = findEvent(eventId);
         checkUserTookPartInEvent(user, event);
+        int rating = getUserEventRating(userId, eventId);
+        switch (rating) {
+            case 1:
+                deleteUserRatings(userId, List.of(eventId));
+            case 0:
+                createDislike(userId, eventId);
+                break;
+            case -1:
+                log.info("Этот пользователь {} уже поставил дизлайк событию {}", user, event);
+                throw new ConflictException();
+        }
         return EventRating.builder()
                 .event(eventMapper.toEventShortDto(event))
                 .rating("dislike")
@@ -189,12 +211,24 @@ public class RatingServiceImpl implements RatingService {
         for (Long eventId : eventIds) {
             Event event = findEvent(eventId);
             checkUserTookPartInEvent(user, event);
+            int rating = getUserEventRating(userId, eventId);
+            if (rating != 1) {
+                log.info("Данный пользователь {} не ставил лайк событию {}", user, event);
+                throw new ConflictException();
+            }
         }
         deleteUserRatings(userId, eventIds);
     }
 
     @Override
     public void deleteEventLike(Long userId, Long eventId) {
+        User user = findUser(userId);
+        Event event = findEvent(eventId);
+        int rating = getUserEventRating(userId, eventId);
+        if (rating != 1) {
+            log.info("Данный пользователь {} не ставил лайк событию {}", user, event);
+            throw new ConflictException();
+        }
         deleteUserRatings(userId, List.of(eventId));
     }
 
@@ -204,34 +238,25 @@ public class RatingServiceImpl implements RatingService {
         for (Long eventId : eventIds) {
             Event event = findEvent(eventId);
             checkUserTookPartInEvent(user, event);
+            int rating = getUserEventRating(userId, eventId);
+            if (rating != -1) {
+                log.info("Данный пользователь {} не ставил дизлайк событию {}", user, event);
+                throw new ConflictException();
+            }
         }
         deleteUserRatings(userId, eventIds);
     }
 
     @Override
     public void deleteEventDislike(Long userId, Long eventId) {
+        User user = findUser(userId);
+        Event event = findEvent(eventId);
+        int rating = getUserEventRating(userId, eventId);
+        if (rating != -1) {
+            log.info("Данный пользователь {} не ставил дизлайк событию {}", user, event);
+            throw new ConflictException();
+        }
         deleteUserRatings(userId, List.of(eventId));
-    }
-
-
-    @Override
-    public UserTopRating getUserRating(Integer top) {
-        String sql = "SELECT events.initiator_id\n" +
-                "FROM PUBLIC.RATINGS\n" +
-                "LEFT JOIN events ON RATINGS.EVENT_ID = EVENTS.ID\n" +
-                "GROUP BY initiator_id\n" +
-                "ORDER BY SUM(rating) DESC\n" +
-                "LIMIT :top";
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("top", top);
-        List<User> users = namedJdbcTemplate.query(sql, parameters, (rs, rowNum) ->
-                findUser(rs.getLong("initiator_id")));
-        log.info("Получен рейтинг {} авторов событий: {}", top, users);
-        return UserTopRating.builder()
-                .users(users.stream()
-                        .map(userMapper::toUserShortDto)
-                        .collect(Collectors.toList()))
-                .build();
     }
 
     @Override
@@ -253,14 +278,50 @@ public class RatingServiceImpl implements RatingService {
                 .build();
     }
 
+    @Override
+    public UserTopRating getUserRating(Integer top) {
+        String sql = "SELECT events.initiator_id\n" +
+                "FROM PUBLIC.RATINGS\n" +
+                "LEFT JOIN events ON RATINGS.EVENT_ID = EVENTS.ID\n" +
+                "GROUP BY initiator_id\n" +
+                "ORDER BY SUM(rating) DESC\n" +
+                "LIMIT :top";
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("top", top);
+        List<User> users = namedJdbcTemplate.query(sql, parameters, (rs, rowNum) ->
+                findUser(rs.getLong("initiator_id")));
+        log.info("Получен рейтинг {} авторов событий: {}", top, users);
+        return UserTopRating.builder()
+                .users(users.stream()
+                        .map(userMapper::toUserShortDto)
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
     private User findUser(long userId) {
+        if (userId == 0) {
+            log.info("Не верный id: {} пользователя", userId);
+            throw new ValidationException();
+        }
         Optional<User> user = userRepository.findById(userId);
-        log.info("Найден пользователь {}", userId);
+        if (user.isEmpty()) {
+            log.info("Пользователь не найден id: {}", userId);
+            throw new NotFoundException();
+        }
+        log.info("Пользователь не найден id: {}", userId);
         return user.get();
     }
 
     private Event findEvent(long eventId) {
+        if (eventId == 0) {
+            log.info("ID события не верный {}", eventId);
+            throw new ValidationException();
+        }
         Optional<Event> event = eventRepository.findById(eventId);
+        if (event.isEmpty()) {
+            log.info("Не найдено событие id: {}", eventId);
+            throw new NotFoundException();
+        }
         log.info("Найдено событие id: {}", eventId);
         return event.get();
     }

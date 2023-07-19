@@ -99,7 +99,7 @@
 			"response": []
 		},
 		{
-			"name": "Create event without moderation",
+			"name": "Add new event without moderation",
 			"event": [
 				{
 					"listen": "test",
@@ -129,7 +129,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"annotation\": \"Поездка на пикник\",\r\n    \"category\": 1,\r\n    \"description\": \"Поездка на пикник обещает быть увлекательной.\",\r\n    \"eventDate\": \"2023-09-09 10:10:01\",\r\n    \"location\": {\r\n        \"lat\": 55.623327,\r\n        \"lon\": 37.68\r\n    },\r\n    \"paid\": false,\r\n    \"participantLimit\": 10,\r\n    \"requestModeration\": false,\r\n    \"title\": \"Поездка на пикник\"\r\n}",
+					"raw": "{\r\n    \"annotation\": \"Поездка на пикник.\",\r\n    \"category\": 1,\r\n    \"description\": \"Пикник будет классным\",\r\n    \"eventDate\": \"2024-12-31 15:10:05\",\r\n    \"location\": {\r\n        \"lat\": 55.754167,\r\n        \"lon\": 37.62\r\n    },\r\n    \"paid\": true,\r\n    \"participantLimit\": 10,\r\n    \"requestModeration\": false,\r\n    \"title\": \"Пикник\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -148,6 +148,8 @@
 					]
 				}
 			},
+			"response": []
+		},
 			"response": []
 		},
 		{

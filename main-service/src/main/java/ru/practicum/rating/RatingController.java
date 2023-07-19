@@ -36,6 +36,7 @@ public class RatingController {
         return ResponseEntity.ok().body(ratingService.getUserRating(top));
     }
 
+
     @PostMapping("/users/{userId}/likes")
     public ResponseEntity<EventsRating> addEventsLike(@PathVariable Long userId,
                                                       @RequestParam(required = false) List<Long> eventIds) {

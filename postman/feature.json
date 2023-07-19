@@ -150,8 +150,6 @@
 			},
 			"response": []
 		},
-			"response": []
-		},
 		{
 			"name": "Publish event",
 			"event": [

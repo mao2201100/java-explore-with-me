@@ -25,13 +25,13 @@ public class RatingController {
     }
 
     @GetMapping("/rating/event")
-    public ResponseEntity<EventTopRating> getEventRating(@RequestParam Integer top) {
+    public ResponseEntity<EventTopRating> getEventRating(@RequestParam(defaultValue = "3") Integer top) {
         log.info("Получен GET запрос: /rating/event?top={} endpoint", top);
         return ResponseEntity.ok().body(ratingService.getEventRating(top));
     }
 
     @GetMapping("/rating/user")
-    public ResponseEntity<UserTopRating> getUserRating(@RequestParam Integer top) {
+    public ResponseEntity<UserTopRating> getUserRating(@RequestParam(defaultValue = "3") Integer top) {
         log.info("Получен GET запрос: /rating/user?top={} endpoint", top);
         return ResponseEntity.ok().body(ratingService.getUserRating(top));
     }

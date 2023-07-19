@@ -10,7 +10,6 @@ import ru.practicum.rating.dto.EventsRating;
 import ru.practicum.rating.dto.UserTopRating;
 import ru.practicum.rating.service.RatingService;
 
-
 import java.util.List;
 
 @Slf4j

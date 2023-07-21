@@ -1,9 +1,11 @@
 package ru.practicum.rating.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.event.mapper.EventMapper;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.repository.EventRepository;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class RatingServiceImpl implements RatingService {
 
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
@@ -36,19 +39,8 @@ public class RatingServiceImpl implements RatingService {
     private final EventMapper eventMapper;
     private final UserMapper userMapper;
 
-    public RatingServiceImpl(NamedParameterJdbcTemplate namedJdbcTemplate, UserRepository userRepository,
-                             RequestRepository requestRepository, EventRepository eventRepository,
-                             EventMapper eventMapper, UserMapper userMapper) {
-        this.namedJdbcTemplate = namedJdbcTemplate;
-        this.userRepository = userRepository;
-        this.requestRepository = requestRepository;
-        this.eventRepository = eventRepository;
-        this.eventMapper = eventMapper;
-        this.userMapper = userMapper;
-    }
-
-
     @Override
+    @Transactional
     public EventRating createEventLike(Long userId, Long eventId) {
         User user = findUser(userId);
         Event event = findEvent(eventId);
@@ -79,6 +71,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    @Transactional
     public EventsRating createEventsLike(Long userId, List<Long> eventIds) {
         User user = findUser(userId);
         List<Event> eventsToAddLike = new ArrayList<>();
@@ -141,6 +134,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    @Transactional
     public EventsRating createEventsDislike(Long userId, List<Long> eventIds) {
         User user = findUser(userId);
         List<Event> eventsToAddLike = new ArrayList<>();
@@ -174,6 +168,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    @Transactional
     public EventRating createEventDislike(Long userId, Long eventId) {
         User user = findUser(userId);
         Event event = findEvent(eventId);
@@ -206,6 +201,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    @Transactional
     public void deleteEventsLike(Long userId, List<Long> eventIds) {
         User user = findUser(userId);
         for (Long eventId : eventIds) {
@@ -221,6 +217,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    @Transactional
     public void deleteEventLike(Long userId, Long eventId) {
         User user = findUser(userId);
         Event event = findEvent(eventId);
@@ -233,6 +230,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    @Transactional
     public void deleteEventsDislike(Long userId, List<Long> eventIds) {
         User user = findUser(userId);
         for (Long eventId : eventIds) {
@@ -248,6 +246,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    @Transactional
     public void deleteEventDislike(Long userId, Long eventId) {
         User user = findUser(userId);
         Event event = findEvent(eventId);
@@ -260,6 +259,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public EventTopRating getEventRating(Integer top) {
         String sql = "SELECT event_id\n" +
                 "FROM PUBLIC.RATINGS\n" +
@@ -279,6 +279,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserTopRating getUserRating(Integer top) {
         String sql = "SELECT events.initiator_id\n" +
                 "FROM PUBLIC.RATINGS\n" +

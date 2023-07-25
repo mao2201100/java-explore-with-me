@@ -8,7 +8,6 @@ import ru.practicum.category.model.dto.CategoryDto;
 import ru.practicum.category.model.dto.NewCategoryDto;
 import ru.practicum.category.service.CategoryService;
 
-
 import java.util.List;
 
 @Slf4j

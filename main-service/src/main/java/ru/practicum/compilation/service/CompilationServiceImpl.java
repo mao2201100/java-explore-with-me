@@ -1,8 +1,6 @@
 package ru.practicum.compilation.service;
 
 
-
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -17,8 +15,6 @@ import ru.practicum.event.model.Event;
 import ru.practicum.event.repository.EventRepository;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.exception.ValidationException;
-
-
 
 import java.util.ArrayList;
 import java.util.List;
